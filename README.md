@@ -39,11 +39,10 @@ Upstream
 --------
 
 URL:
-[GitHub.com](https://github.com/eworm-de/routeros-scripts-custom)
+[git.s1q.dev](https://git.s1q.dev/phg/routeros-scripts-custom)
 
 Mirror:
-[eworm.de](https://git.eworm.de/cgit/routeros-scripts-custom/about/)
-[GitLab.com](https://gitlab.com/eworm-de/routeros-scripts-custom)
+[GitHub.com](https://github.com/shokinn/routeros-scripts-custom)
 
 ---
 [⬆️ Go back to top](#top)
