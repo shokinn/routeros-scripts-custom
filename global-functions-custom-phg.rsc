@@ -14,24 +14,25 @@
 :global GlobalFunctionsCustomPhgReady false;
 
 # global functions
-:global SafelyResolve
+:global SafeResolve
 
 # Function: safelyResolve
 #  - Takes a DNS string (e.g. "example.com")
 #  - Takes an IP type [ipv4, ipv6]
 #  - Returns a string of and IP address or false if it can't be resolved
-:set SafelyResolve do={
+:set SafeResolve do={
   :do {
     :local DomainName [ :tostr $1 ];
-    :if ( [ :tostr $2 ] = "ipv4" or [ :tostr $2 ] = "ipv6" ) do={
-      :local IPType [ :tostr $2 ];
+    :local IPType;
+    :if ( ([ :tostr $2 ] = "ipv4") or ([ :tostr $2 ] = "ipv6") ) do={
+      :set IPType [ :tostr $2 ];
     } else={
-      :local IPType "ipv4";
+      :global ExitError; $ExitError false $0;
     }
-    :local IP [:resolve domain-name="$DomainName" type=$IPType];
-    :return "$IP";
+    :local ResolvedIP [:resolve domain-name="$DomainName" type=$IPType];
+    :return "$ResolvedIP";
   } on-error={
-    return false;
+    :return false;
   }
 }
 
