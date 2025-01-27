@@ -14,6 +14,7 @@ to manage RouterOS devices or extend their functionality.
   - [Table of Contents](#table-of-contents)
   - [Requirements](#requirements)
   - [Installation](#installation)
+    - [Prerequisites (a.k.a. Install certificates)](#prerequisites-aka-install-certificates)
     - [Initial Setup](#initial-setup)
     - [Adding a script](#adding-a-script)
   - [Available scripts](#available-scripts)
@@ -28,6 +29,36 @@ on upstream project. Visit
 follow the instructions there for the basic installation and setup.
 
 ## Installation
+
+### Prerequisites (a.k.a. Install certificates)
+
+The update script does server certificate verification, so first step is to download the certificates. If you intend to download the scripts from a different location (for example from github.com) install the corresponding certificate chain.
+
+```rsc
+/tool/fetch "https://letsencrypt.org/certs/isrgrootx1.pem" dst-path="isrgrootx1.pem";
+```
+
+Note that the commands above do not verify server certificate, so if you want to be safe download with your workstations's browser and transfer the file to your MikroTik device.
+
+- [ISRG Root X1](https://letsencrypt.org/certificates/)
+  - You'll need the ISRG Root X1 (self-signed) certificate in pem format
+
+Then we import the certificate.
+
+```rsc
+/certificate/import file-name=isrgrootx1.pem passphrase="";
+```
+
+Do not worry that the command is not shown - that happens because it contains a sensitive property, the passphrase.
+
+For basic verification we rename the certificate and print it by fingerprint. Make sure exactly this one certificate ("ISRG-Root-X1") is shown.
+
+/certificate/set name="ISRG-Root-X1" [ find where common-name="ISRG Root X1" ];
+/certificate/print proplist=name,fingerprint where fingerprint="96bcec06264976f37460779acf28c5a7cfe8a3c0aae11a8ffcee05c0bddf08c6";
+
+Always make sure there are no certificates installed you do not know or want!
+
+All following commands will verify the server certificate. For validity the certificate's lifetime is checked with local time, so make sure the device's date and time is set correctly!
 
 ### Initial Setup
 
