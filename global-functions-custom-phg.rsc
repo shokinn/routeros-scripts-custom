@@ -19,7 +19,7 @@
 # Function: safelyResolve
 #  - Takes a DNS string (e.g. "example.com")
 #  - Takes an IP type [ipv4, ipv6]
-#  - Returns a string of and IP address or false if it can't be resolved
+#  - Returns a string of an IP address or false if it can't be resolved
 :set SafeResolve do={
   :do {
     :local DomainName [ :tostr $1 ];
