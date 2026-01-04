@@ -7,13 +7,13 @@ Hello World
 > installation. See [main README](../README.md) for details.
 
 Description
------------ 
+-----------
 
 This is a demo script. Invoked from terminal it writes to system log and
 terminal, or sends a notification otherwise.
 
 Requirements and installation
------------------------------ 
+-----------------------------
 
 Just install the script:
 
@@ -26,17 +26,17 @@ There's no specific configuration in `global-config-overlay`, other than
 general configuration for notifications.
 
 Usage and invocation
--------------------- 
+--------------------
 
 Just run the script:
 
     /system/script/run hello-world;
 
-See also 
+See also
 --------
 
 * ...
 
---- 
-[⬅️ Go back to main README](../README.md)  
+---
+[⬅️ Go back to main README](../README.md)
 [⬆️ Go back to top](#top)
