@@ -1,16 +1,16 @@
 #!rsc by RouterOS
 # RouterOS script: hello-world
-# Copyright (c) 2023-2025 Christian Hesse <mail@eworm.de>
+# Copyright (c) 2023-2026 Christian Hesse <mail@eworm.de>
 # https://git.eworm.de/cgit/routeros-scripts-custom/about/COPYING.md
 #
 # hello-world demo script
 # https://git.eworm.de/cgit/routeros-scripts-custom/about/doc/hello-world.md
 
-:global GlobalFunctionsReady;
-:while ($GlobalFunctionsReady != true) do={ :delay 500ms; }
-
 :local ExitOK false;
-:do {
+onerror Err {
+  :global GlobalConfigReady; :global GlobalFunctionsReady;
+  :retry { :if ($GlobalConfigReady != true || $GlobalFunctionsReady != true) \
+      do={ :error ("Global config and/or functions not ready."); }; } delay=500ms max=50;
   :local ScriptName [ :jobname ];
 
   :global LogPrint;
@@ -22,6 +22,6 @@
   } else={
     $SendNotification2 ({ origin=$ScriptName; subject="Hello..."; message="... world!" });
   }
-} on-error={
-  :global ExitError; $ExitError $ExitOK [ :jobname ];
+} do={
+  :global ExitError; $ExitError $ExitOK [ :jobname ] $Err;
 }
