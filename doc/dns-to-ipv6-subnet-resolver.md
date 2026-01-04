@@ -27,7 +27,7 @@ Just install the script:
 
 ```rsc
 $ScriptInstallUpdate dns-to-ipv6-subnet-resolver "base-url=https://git.s1q.dev/phg/routeros-scripts-custom/raw/branch/main/";
-/system/script/set [find name="dns-to-ipv6-subnet-resolver"] policy=read,write,test
+/system/script/set [find name="dns-to-ipv6-subnet-resolver"] policy=read,write,test,policy
 ```
 
 ## Configuration
@@ -86,7 +86,7 @@ How to run the script manually:
 Setup a Scheduler to run the script regularly:
 
 ```rsc
-/system/scheduler/add name="dns-to-ipv6-subnet-resolver" interval="00:05:00" policy="read,write,test" on-event="/system/script/run dns-to-ipv6-subnet-resolver;";
+/system/scheduler/add name="dns-to-ipv6-subnet-resolver" interval="00:05:00" policy="read,write,test,policy" on-event="/system/script/run dns-to-ipv6-subnet-resolver;";
 ```
 
 ---
