@@ -8,26 +8,26 @@
 # <short script description>
 # https://git.s1q.dev/phg/routeros-scripts-custom/about/doc/<script-filename>.md
 
-:global GlobalFunctionsReady;
-:while ($GlobalFunctionsReady != true) do={ :delay 500ms; }
-
 :local ExitOK false;
-:do {
+onerror Err {
+  :global GlobalConfigReady; :global GlobalFunctionsReady;
+  :retry { :if ($GlobalConfigReady != true || $GlobalFunctionsReady != true) \
+      do={ :error ("Global config and/or functions not ready."); }; } delay=500ms max=50;
   :local ScriptName [ :jobname ];
 
   :global LogPrint;
-  :global ParseKeyValueStore;
-  :global ScriptLock;
+  :global ScriptFromTerminal;
+  :global SendNotification2;
 
-  # Local/global script specific variables
-
-  :if ([ $ScriptLock $ScriptName ] = false) do={
-    :set ExitOK true;
-    :error false;
+  # Log notifications locally, or send them via email/pushover etc. when not run from terminal
+  # Usually used for important notifications only
+  :if ([ $ScriptFromTerminal $ScriptName ] = true) do={
+    # Add Script from here for running from terminal:
+    $LogPrint info $ScriptName ("Hello world!");
+  } else={
+    # Add Script from here for running as scheduled script:
+    $SendNotification2 ({ origin=$ScriptName; subject="Hello..."; message="... world!" });
   }
-
-  # Add Script from here:
-
-} on-error={
-  :global ExitError; $ExitError $ExitOK [ :jobname ];
+} do={
+  :global ExitError; $ExitError $ExitOK [ :jobname ] $Err;
 }
