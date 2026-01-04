@@ -1,3 +1,4 @@
+#!rsc by RouterOS
 # -------------------------------------------------------------------------------
 # Script to grab IPv6 Addresses from DNS an converting them to subnets
 #
