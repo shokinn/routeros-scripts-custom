@@ -44,59 +44,61 @@ onerror Err {
   }
 
   :local GetAnnouncedIP do={
-    :do {
+    :local Records;
+    :local AnnouncedIP;
+
+    :onerror GetAnnouncedIPErr in={
       $LogPrint debug $ScriptName ("GetAnnouncedIP - started");
-      [/system/script/run "JParseFunctions"; global JSONLoad; global JSONLoads; global JSONUnload];
-      $LogPrint debug $ScriptName ("GetAnnouncedIP - JParseFunctions loaded");
+        [/system/script/run "JParseFunctions"; global JSONLoad; global JSONLoads; global JSONUnload];
+        $LogPrint debug $ScriptName ("GetAnnouncedIP - JParseFunctions loaded");
 
-      :local Records;
-      :local AnnouncedIP;
-
-      :set Records ([$JSONLoads ([/tool/fetch "$APIUrl/zones/$ZoneName/rrsets/$RecordName/$RecordType" http-method=get http-header-field="Authorization: Bearer $APIToken" output=user as-value]->"data")]->"rrset"->"records");
-      $LogPrint debug $ScriptName ("GetAnnouncedIP - Records received: " . [:len $Records]);
-      foreach rec in=$Records do={
-        $LogPrint debug $ScriptName ("GetAnnouncedIP - Record: Name: \"" . $RecordName . "\", Type: \"" . $RecordType . "\", Value: \"" . ($rec->"value") . "\", Comment: \"" . ($rec->"comment") . "\"");
-      }
-
-      :if ([:len $Records] > 1) do={
-        :error ("Multiple records found for \"$RecordName.$ZoneName\", RecordType: $RecordType. This is not supported.");
-      } else={
-        :if ([:len $Records] = 1) do={
-          :set AnnouncedIP ($Records->0->"value");
+        :set Records ([$JSONLoads ([/tool/fetch "$APIUrl/zones/$ZoneName/rrsets/$RecordName/$RecordType" http-method=get http-header-field="Authorization: Bearer $APIToken" output=user as-value]->"data")]->"rrset"->"records");
+        $LogPrint debug $ScriptName ("GetAnnouncedIP - Records received: " . [:len $Records]);
+        foreach rec in=$Records do={
+          $LogPrint debug $ScriptName ("GetAnnouncedIP - Record: Name: \"" . $RecordName . "\", Type: \"" . $RecordType . "\", Value: \"" . ($rec->"value") . "\", Comment: \"" . ($rec->"comment") . "\"");
         }
-      }
-      $LogPrint debug $ScriptName ("GetAnnouncedIP - Announced IP is: " . $AnnouncedIP);
 
-      :return $AnnouncedIP;
-    } on-error={
-      :local Err $message;
+        :if ([:len $Records] > 1) do={
+          :error ("Multiple records found for \"$RecordName.$ZoneName\", RecordType: $RecordType. This is not supported.");
+        } else={
+          :if ([:len $Records] = 1) do={
+            :set AnnouncedIP ($Records->0->"value");
+          }
+        }
+        $LogPrint debug $ScriptName ("GetAnnouncedIP - Announced IP is: " . $AnnouncedIP);
 
-      :if ([:find $Err "404"] != -1) do={
+        :return $AnnouncedIP;
+    } do={
+      $LogPrint debug $ScriptName ("GetAnnouncedIP - Error Message: " . $GetAnnouncedIPErr);
+
+      :if ([:find "$GetAnnouncedIPErr" "status 404";] >= 1) do={
         $LogPrint debug $ScriptName ("GetAnnouncedIP - Announced IP is not set");
         :return false;
       }
-      :error ("GetAnnouncedIP - API Error - $Err");
+      :error ("GetAnnouncedIP - API Error - $GetAnnouncedIPErr");
     }
+    :return $AnnouncedIP;
   }
 
   :local APISetRecord do={
-    :do {
+    :local APIResponse;
+
+    :onerror APISetRecordErr in={
       $LogPrint debug $ScriptName ("APISetRecord - started");
       [/system/script/run "JParseFunctions"; global JSONLoad; global JSONLoads; global JSONUnload];
       $LogPrint debug $ScriptName ("APISetRecord - JParseFunctions loaded");
 
       :local Records;
       :local Record;
-      :local APIResponse;
       :local Payload;
 
-      :do {
+      :onerror GetRecordsErr in={
         :set Records ([$JSONLoads ([/tool/fetch "$APIUrl/zones/$ZoneName/rrsets/$RecordName/$RecordType" http-method=get http-header-field="Authorization: Bearer $APIToken" output=user as-value]->"data")]->"rrset"->"records");
-      } on-error={
-        :if ([:find $message "404"] != -1) do={
+      } do={
+        :if ([:find "$GetRecordsErr" "status 404";] >= 1) do={
           :set Records [:toarray ""];
         } else={
-          $LogPrint error $ScriptName ("APISetRecord - Could not get record from API - $message");
+          $LogPrint error $ScriptName ("APISetRecord - Could not get record from API - $GetRecordsErr");
         }
       }
       $LogPrint debug $ScriptName ("APISetRecord - Records received: " . [:len $Records]);
@@ -138,11 +140,12 @@ onerror Err {
       $JSONUnload;
       $LogPrint debug $ScriptName ("APISetRecord - JSONUnload done");
       $LogPrint debug $ScriptName ("APISetRecord - finished");
-      return $APIResponse;
-    } on-error={
+      :return $APIResponse;
+    } do={
       #TODO Send error via Notification system
-      $LogPrint error $ScriptName ("Could not set record - $message");
+      $LogPrint error $ScriptName ("Could not set record - Zone: " . $ZoneName . ", RecordName: " . $RecordName . ", RecordType: " . $RecordType . " - API Error: " . $APISetRecordErr);
     }
+    :return $APIResponse;
   }
 
 
