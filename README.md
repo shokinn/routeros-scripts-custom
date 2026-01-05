@@ -87,7 +87,7 @@ $ScriptInstallUpdate ddns-hetzner,dns-to-ipv6-subnet-resolver "base-url=https://
 
 ## Available scripts
 
-- [Hello World](doc/hello-world.md)
+- [DDNS (DynDNS) Hetzner update script](doc/ddns-hetzner.md)
 - [DNS to IPv6 subnet resolver](doc/dns-to-ipv6-subnet-resolver.md)
 
 ## License and warranty
