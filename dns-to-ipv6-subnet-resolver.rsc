@@ -6,7 +6,7 @@
 # RouterOS compatibility: 7+
 # Version 1.1
 # last update: 03.01.2026
-# https://git.s1q.dev/phg/routeros-scripts-custom/about/doc/dns-to-ipv6-subnet-resolver.md
+# https://git.s1q.dev/phg/routeros-scripts-custom/src/branch/main/doc/dns-to-ipv6-subnet-resolver.md
 # -------------------------------------------------------------------------------
 
 :local ExitOK false;

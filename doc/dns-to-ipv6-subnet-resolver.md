@@ -32,7 +32,7 @@ $ScriptInstallUpdate dns-to-ipv6-subnet-resolver "base-url=https://git.s1q.dev/p
 
 ## Configuration
 
-Edit `global-config-overlay` and Add the following variables.
+Edit `global-config-overlay` and add the following variables.
 
 | Variable name                     | Required | Data type | Example                             | Description                                                                  |
 | :-------------------------------- | :------- | :-------- | :---------------------------------- | :--------------------------------------------------------------------------- |
