@@ -32,49 +32,37 @@ follow the instructions there for the basic installation and setup.
 
 ### Prerequisites (a.k.a. Install certificates)
 
-The update script does server certificate verification, so first step is to download the certificates. If you intend to download the scripts from a different location (for example from github.com) install the corresponding certificate chain.
+The update script does server certificate verification, so first step is to download the certificates. If you intend to download the scripts from a different location (for example from git.s1q.dev or github.com) install the corresponding certificate chain.  
+Depending from where you want to install my RouterOS scripts, you need to import a
+Let's Encrypt root certificate (git.s1q.dev) or the USERTrust root certificate (github.com).
+
+`git.s1q.dev`:
 
 ```rsc
-/tool/fetch "https://letsencrypt.org/certs/isrgrootx1.pem" dst-path="isrgrootx1.pem";
+$CertificateAvailable "ISRG Root X1" "fetch";
 ```
 
-Note that the commands above do not verify server certificate, so if you want to be safe download with your workstations's browser and transfer the file to your MikroTik device.
-
-- [ISRG Root X1](https://letsencrypt.org/certificates/)
-  - You'll need the ISRG Root X1 (self-signed) certificate in pem format
-
-Then we import the certificate.
+`github.com`:
 
 ```rsc
-/certificate/import file-name=isrgrootx1.pem passphrase="";
+$CertificateAvailable "USERTrust ECC Certification Authority" "fetch";
 ```
 
-Do not worry that the command is not shown - that happens because it contains a sensitive property, the passphrase.
-
-For basic verification we rename the certificate and print it by fingerprint. Make sure exactly this one certificate ("ISRG-Root-X1") is shown.
-
-```rsc
-/certificate/set name="ISRG-Root-X1" [ find where common-name="ISRG Root X1" ];
-/certificate/print proplist=name,fingerprint where fingerprint="96bcec06264976f37460779acf28c5a7cfe8a3c0aae11a8ffcee05c0bddf08c6";
-```
-
-Always make sure there are no certificates installed you do not know or want!
+> [!IMPORTANT]
+> Always make sure there are no certificates installed you do not know or want!
 
 All following commands will verify the server certificate. For validity the certificate's lifetime is checked with local time, so make sure the device's date and time is set correctly!
 
+> [!TIP]
+> In Christian's RouterOS scripts there is tooling to easily install additional certificates.  
+> <https://github.com/eworm-de/routeros-scripts/blob/main/CERTIFICATES.md>
+
 ### Initial Setup
 
-Download the `global-functions-custom-phg.rsc` script:
+Download the `global-functions.d/phg.rsc` script:
 
 ```rsc
-$ScriptInstallUpdate global-functions-custom-phg "base-url=https://git.s1q.dev/phg/routeros-scripts-custom/raw/branch/main/";
-```
-
-And finally load my custom functions and add a scheduler to load them on each startup.
-
-```rsc
-/system/script/run global-functions-custom-phg;
-/system/scheduler/add name="global-scripts-custom-phg" start-time=startup on-event="/system/script/run global-functions-custom-phg;";
+$ScriptInstallUpdate global-functions.d/phg "base-url=https://git.s1q.dev/phg/routeros-scripts-custom/raw/branch/main/";
 ```
 
 ### Adding a script
