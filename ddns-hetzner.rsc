@@ -21,7 +21,6 @@ onerror Err {
   :global LogPrint;
   :global ParseKeyValueStore;
   :global ScriptLock;
-  :global SafeResolve;
 
   # Local/global script specific variables
   :global PhgDDNSHetznerAPIToken;
