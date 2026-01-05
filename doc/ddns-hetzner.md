@@ -45,7 +45,7 @@ Create another new script:
 ### Pre requisites
 
 > [!IMPORTANT]
-> **It's strongly recommended to create a separate Project just for your DNS Zone!**
+> **It's strongly recommended to create a separate Project just for your DNS Zone!**  
 > Because the API Token you will create will have Read/Write access to the whole Project it can't be restricted to specific services like DNS.
 
 Create a [API token for Hetzner's Cloud API](https://docs.hetzner.cloud/reference/cloud#getting-started).
