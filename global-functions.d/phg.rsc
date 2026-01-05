@@ -1,12 +1,12 @@
 #!rsc by RouterOS
-# RouterOS script: global-functions-custom-phg
-# Copyright (c) 2025 Philip 'ShokiNN' Henning <mail@philip-henning.com>
+# RouterOS script: global-functions.d/phg.rsc
+# Copyright (c) 2025-2026 Philip 'ShokiNN' Henning <mail@philip-henning.com>
 # https://git.s1q.dev/phg/routeros-scripts-custom/about/COPYING.md
 #
 # requires RouterOS, version=7.14
 #
 # global functions for my custom scripts
-# https://git.s1q.dev/phg/routeros-scripts-custom/about
+# https://git.s1q.dev/phg/routeros-scripts-custom
 
 :local ScriptName [ :jobname ];
 
