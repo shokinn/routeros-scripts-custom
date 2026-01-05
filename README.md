@@ -53,8 +53,10 @@ Do not worry that the command is not shown - that happens because it contains a 
 
 For basic verification we rename the certificate and print it by fingerprint. Make sure exactly this one certificate ("ISRG-Root-X1") is shown.
 
+```rsc
 /certificate/set name="ISRG-Root-X1" [ find where common-name="ISRG Root X1" ];
 /certificate/print proplist=name,fingerprint where fingerprint="96bcec06264976f37460779acf28c5a7cfe8a3c0aae11a8ffcee05c0bddf08c6";
+```
 
 Always make sure there are no certificates installed you do not know or want!
 
