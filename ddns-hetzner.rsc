@@ -1,6 +1,6 @@
 #!rsc by RouterOS
 # RouterOS script: ddns-hetzner
-# Version 2.0
+# Version 2.0.1
 # Copyright (c) 2024-2026 Philip 'ShokiNN' Henning <mail@philip-henning.com>
 # https://git.s1q.dev/phg/routeros-scripts-custom/about/COPYING.md
 #
