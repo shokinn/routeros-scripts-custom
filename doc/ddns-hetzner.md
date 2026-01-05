@@ -11,8 +11,6 @@
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
   - [Requirements and installation](#requirements-and-installation)
-    - [Dependencies](#dependencies)
-      - [JSON parser Installation](#json-parser-installation)
     - [Pre requisites](#pre-requisites)
     - [Script Installation](#script-installation)
   - [Configuration](#configuration)
@@ -29,18 +27,6 @@ The script is currently only compatible with RouterOS 7.
 RouterOS 6 isn't and won't be supported!
 
 ## Requirements and installation
-
-### Dependencies
-
-This script requires [Winand](https://github.com/Winand)'s [mikrotik-json-parser](https://github.com/Winand/mikrotik-json-parser) to be installed.
-
-#### JSON parser Installation
-
-Create another new script:
-
-   1. Name: `JParseFunctions`
-   2. Policy: `read`, `write`, `test` uncheck everything else
-   3. Source: The content of [mikrotik-json-parser](https://github.com/Winand/mikrotik-json-parser/blob/master/JParseFunctions)
 
 ### Pre requisites
 

@@ -1,6 +1,6 @@
 #!rsc by RouterOS
 # RouterOS script: ddns-hetzner
-# Version 2.0.1
+# Version 2.0.2
 # Copyright (c) 2024-2026 Philip 'ShokiNN' Henning <mail@philip-henning.com>
 # https://git.s1q.dev/phg/routeros-scripts-custom/about/COPYING.md
 #
@@ -48,10 +48,8 @@ onerror Err {
 
     :onerror GetAnnouncedIPErr in={
       $LogPrint debug $ScriptName ("GetAnnouncedIP - started");
-        [/system/script/run "JParseFunctions"; global JSONLoad; global JSONLoads; global JSONUnload];
-        $LogPrint debug $ScriptName ("GetAnnouncedIP - JParseFunctions loaded");
 
-        :set Records ([$JSONLoads ([/tool/fetch "$APIUrl/zones/$ZoneName/rrsets/$RecordName/$RecordType" http-method=get http-header-field="Authorization: Bearer $APIToken" output=user as-value]->"data")]->"rrset"->"records");
+        :set Records ([:deserialize from=json ([/tool/fetch "$APIUrl/zones/$ZoneName/rrsets/$RecordName/$RecordType" http-method=get http-header-field="Authorization: Bearer $APIToken" output=user as-value]->"data")]->"rrset"->"records");
         $LogPrint debug $ScriptName ("GetAnnouncedIP - Records received: " . [:len $Records]);
         foreach rec in=$Records do={
           $LogPrint debug $ScriptName ("GetAnnouncedIP - Record: Name: \"" . $RecordName . "\", Type: \"" . $RecordType . "\", Value: \"" . ($rec->"value") . "\", Comment: \"" . ($rec->"comment") . "\"");
@@ -84,15 +82,13 @@ onerror Err {
 
     :onerror APISetRecordErr in={
       $LogPrint debug $ScriptName ("APISetRecord - started");
-      [/system/script/run "JParseFunctions"; global JSONLoad; global JSONLoads; global JSONUnload];
-      $LogPrint debug $ScriptName ("APISetRecord - JParseFunctions loaded");
 
       :local Records;
       :local Record;
       :local Payload;
 
       :onerror GetRecordsErr in={
-        :set Records ([$JSONLoads ([/tool/fetch "$APIUrl/zones/$ZoneName/rrsets/$RecordName/$RecordType" http-method=get http-header-field="Authorization: Bearer $APIToken" output=user as-value]->"data")]->"rrset"->"records");
+        :set Records ([:deserialize from=json ([/tool/fetch "$APIUrl/zones/$ZoneName/rrsets/$RecordName/$RecordType" http-method=get http-header-field="Authorization: Bearer $APIToken" output=user as-value]->"data")]->"rrset"->"records");
       } do={
         :if ([:find "$GetRecordsErr" "status 404";] >= 1) do={
           :set Records [:toarray ""];
@@ -136,8 +132,6 @@ onerror Err {
       }
       $LogPrint debug $ScriptName ("APISetRecord - APIResponse: " . $APIResponse);
 
-      $JSONUnload;
-      $LogPrint debug $ScriptName ("APISetRecord - JSONUnload done");
       $LogPrint debug $ScriptName ("APISetRecord - finished");
       :return $APIResponse;
     } do={
