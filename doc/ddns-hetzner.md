@@ -12,9 +12,9 @@
   - [Description](#description)
   - [Requirements and installation](#requirements-and-installation)
     - [Dependencies](#dependencies)
-      - [Installation](#installation)
+      - [JSON parser Installation](#json-parser-installation)
     - [Pre requisites](#pre-requisites)
-    - [Installation](#installation-1)
+    - [Script Installation](#script-installation)
   - [Configuration](#configuration)
     - [`PhgDDNSHetznerAPIToken`](#phgddnshetznerapitoken)
     - [`PhgDDNSHetznerDomainEntryConfig`](#phgddnshetznerdomainentryconfig)
@@ -34,7 +34,7 @@ RouterOS 6 isn't and won't be supported!
 
 This script requires [Winand](https://github.com/Winand)'s [mikrotik-json-parser](https://github.com/Winand/mikrotik-json-parser) to be installed.
 
-#### Installation
+#### JSON parser Installation
 
 Create another new script:
 
@@ -53,7 +53,7 @@ Create a [API token for Hetzner's Cloud API](https://docs.hetzner.cloud/referenc
 The API token can be created at:  
 `Your cloud project` -> `Security` -> `API-Tokens`
 
-### Installation
+### Script Installation
 
 Just install the script:
 
