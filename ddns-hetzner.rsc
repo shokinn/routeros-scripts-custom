@@ -49,7 +49,7 @@ onerror Err {
     :onerror GetAnnouncedIPErr in={
       $LogPrint debug $ScriptName ("GetAnnouncedIP - started");
 
-        :set Records ([:deserialize from=json ([/tool/fetch "$APIUrl/zones/$ZoneName/rrsets/$RecordName/$RecordType" http-method=get http-header-field="Authorization: Bearer $APIToken" output=user as-value]->"data")]->"rrset"->"records");
+        :set Records ([:deserialize from=json value=([/tool/fetch "$APIUrl/zones/$ZoneName/rrsets/$RecordName/$RecordType" http-method=get http-header-field="Authorization: Bearer $APIToken" output=user as-value]->"data")]->"rrset"->"records");
         $LogPrint debug $ScriptName ("GetAnnouncedIP - Records received: " . [:len $Records]);
         foreach rec in=$Records do={
           $LogPrint debug $ScriptName ("GetAnnouncedIP - Record: Name: \"" . $RecordName . "\", Type: \"" . $RecordType . "\", Value: \"" . ($rec->"value") . "\", Comment: \"" . ($rec->"comment") . "\"");
@@ -88,7 +88,7 @@ onerror Err {
       :local Payload;
 
       :onerror GetRecordsErr in={
-        :set Records ([:deserialize from=json ([/tool/fetch "$APIUrl/zones/$ZoneName/rrsets/$RecordName/$RecordType" http-method=get http-header-field="Authorization: Bearer $APIToken" output=user as-value]->"data")]->"rrset"->"records");
+        :set Records ([:deserialize from=json value=([/tool/fetch "$APIUrl/zones/$ZoneName/rrsets/$RecordName/$RecordType" http-method=get http-header-field="Authorization: Bearer $APIToken" output=user as-value]->"data")]->"rrset"->"records");
       } do={
         :if ([:find "$GetRecordsErr" "status 404";] >= 1) do={
           :set Records [:toarray ""];
