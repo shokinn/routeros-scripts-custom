@@ -62,7 +62,7 @@ onerror Err {
       :if ($dnsIp != false) do={
         /ipv6/firewall/address-list/add list="$PhgIpv6AddressList" address="$dnsIp/$configSubnetLength" comment="$configComment";
         :local addedSubnet [:pick [/ipv6/firewall/address-list/get [/ipv6/firewall/address-list/find list="$PhgIpv6AddressList" comment="$configComment"]] 1];
-        $LogPrint debug $ScriptName ("domain: $configDomain - Set to: $addedSubnet");
+        $LogPrint info $ScriptName ("domain: $configDomain - Set to: $addedSubnet");
       }
 
       $LogPrint debug $ScriptName ("Finished configuring domain: $configDomain");
