@@ -40,7 +40,7 @@ onerror Err {
   }
 
   # Log "run of script"
-  $LogPrint info $ScriptName ("running");
+  $LogPrint debug $ScriptName ("running");
 
   :local index 0;
   :foreach i in=$PhgDomainToIpv6Subnet do={
@@ -55,17 +55,17 @@ onerror Err {
       }
       :local dnsIp "";
 
-      $LogPrint info $ScriptName ("Start configuring domain: $configDomain");
+      $LogPrint debug $ScriptName ("Start configuring domain: $configDomain");
       /ipv6/firewall/address-list/remove [/ipv6/firewall/address-list/find list="$PhgIpv6AddressList" comment="$configComment"];
 
       :set dnsIp [$SafeResolve $configDomain ipv6];
       :if ($dnsIp != false) do={
         /ipv6/firewall/address-list/add list="$PhgIpv6AddressList" address="$dnsIp/$configSubnetLength" comment="$configComment";
         :local addedSubnet [:pick [/ipv6/firewall/address-list/get [/ipv6/firewall/address-list/find list="$PhgIpv6AddressList" comment="$configComment"]] 1];
-        $LogPrint info $ScriptName ("domain: $configDomain - Set to: $addedSubnet");
+        $LogPrint debug $ScriptName ("domain: $configDomain - Set to: $addedSubnet");
       }
 
-      $LogPrint info $ScriptName ("Finished configuring domain: $configDomain");
+      $LogPrint debug $ScriptName ("Finished configuring domain: $configDomain");
     } do={
       #TODO Send error via Notification system
       $LogPrint error $ScriptName ("Error processing entry index $index: $i - $SubnetErr");
@@ -73,7 +73,7 @@ onerror Err {
   };
   :set index;
 
-  $LogPrint info $ScriptName ("finished");
+  $LogPrint debug $ScriptName ("finished");
 } do={
   :global ExitError; $ExitError $ExitOK [ :jobname ] $Err;
 }
