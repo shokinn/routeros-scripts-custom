@@ -45,7 +45,7 @@ Just install the script:
 
 ```rsc
 $ScriptInstallUpdate ddns-hetzner "base-url=https://git.s1q.dev/phg/routeros-scripts-custom/raw/branch/main/";
-/system/script/set [find name="ddns-hetzner"] policy=read,write,test
+/system/script/set [find name="ddns-hetzner"] policy=read,write,test,policy
 ```
 
 ## Configuration
@@ -120,7 +120,7 @@ How to run the script manually:
 Setup a Scheduler to run the script regularly:
 
 ```rsc
-/system/scheduler/add name="ddns-hetzner" interval="00:05:00" policy="read,write,test" on-event="/system/script/run ddns-hetzner;";
+/system/scheduler/add name="ddns-hetzner" interval="00:05:00" policy="read,write,test,policy" on-event="/system/script/run ddns-hetzner;";
 ```
 
 ## See also
