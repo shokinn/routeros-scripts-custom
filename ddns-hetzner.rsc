@@ -119,13 +119,15 @@ onerror Err {
       }
       $LogPrint debug $ScriptName ("APISetRecord - Picked Record: " . $RecordDebugLogOutput);
 
+	  :local UpdateTime "$([/system clock get date]) $([/system clock get time])"
+
       :if ([:typeof $Record] != "nothing") do={
-        :set Payload "{\"records\":[{\"value\":\"$InterfaceIP\",\"comment\":\"Updated by RouterOS DDNS Script\"}]}";
+        :set Payload "{\"records\":[{\"value\":\"$InterfaceIP\",\"comment\":\"Updated by RouterOS DDNS Script at $UpdateTime\"}]}";
         $LogPrint debug $ScriptName ("APISetRecord - Payload: " . $Payload);
         $LogPrint debug $ScriptName ("APISetRecord - Updating existing record - URL: $APIUrl/zones/$ZoneName/rrsets/$RecordName/$RecordType/actions/set_records");
         :set APIResponse ([/tool/fetch "$APIUrl/zones/$ZoneName/rrsets/$RecordName/$RecordType/actions/set_records" http-method=post http-header-field="Content-Type: application/json,Authorization: Bearer $APIToken" http-data=$Payload output=user as-value]->"status");
       } else={
-        :set Payload "{\"name\":\"$RecordName\",\"type\":\"$RecordType\",\"ttl\":$([:tonum $RecordTTL]),\"records\":[{\"value\":\"$InterfaceIP\",\"comment\":\"Updated by RouterOS DDNS Script\"}]}";
+        :set Payload "{\"name\":\"$RecordName\",\"type\":\"$RecordType\",\"ttl\":$([:tonum $RecordTTL]),\"records\":[{\"value\":\"$InterfaceIP\",\"comment\":\"Updated by RouterOS DDNS Script at $UpdateTime\"}]}";
         $LogPrint debug $ScriptName ("APISetRecord - Payload: " . $Payload);
         $LogPrint debug $ScriptName ("APISetRecord - Creating new record - URL: $APIUrl/zones/$ZoneName/rrsets");
         :set APIResponse ([/tool/fetch "$APIUrl/zones/$ZoneName/rrsets" http-method=post http-header-field="Content-Type: application/json,Authorization: Bearer $APIToken" http-data=$Payload output=user as-value]->"status");
